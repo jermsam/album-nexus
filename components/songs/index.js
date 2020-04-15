@@ -12,18 +12,14 @@ import { useMutation,useQuery } from "@apollo/react-hooks";
 import {SongsQuery,CreateSongMutation} from 'pages/api/apollo'
 
 
-const key = 'AIzaSyCT5YNj0WpEUrt_4K8b3GZ6NoBZTOImXMA';
+const key = process.env.YOUTUBE_KEY;
 
 
 
 
 export const Song = ({ name, Artist, albumCoverUrl }) => {
 
-  React.useEffect(
-    ()=>{
-      console.log(Artist)
-    },[Artist]
-  )
+ 
 
   return(
     
@@ -194,7 +190,7 @@ export const SongForm =()=>{
        
            <Flex flex marginTop='3rem' marginBottom='2rem' justify='center' >
 
-         <Container style={{minWidth:'360px'}}>
+         <Container style={{minWidth:'36clear0px'}}>
          <Search
          style={{ borderRadius: "0px !important"}}
            fluid

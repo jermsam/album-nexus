@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 // import auth0 from 'auth0-js'
 /** configure apollo client */
 
-const uri='http://localhost:3000/api'
+const uri=`${process.env.URL}/api`
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
