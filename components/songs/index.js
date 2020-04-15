@@ -143,7 +143,7 @@ export const SongForm =()=>{
             setIsSubmitting(false)
               setValue('')
            }
-            
+            window.location.reload()
         },[selected]
     )
 
@@ -181,9 +181,10 @@ export const SongForm =()=>{
               variantColor="teal" 
               variant="outline"
               isLoading={isSubmitting}
-              type="submit"
+              
               onClick={onSubmit}
               size="lg"
+              type='submit'
             >
              <Icon name='add' /> add to play list
             </Button>
