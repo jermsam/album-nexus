@@ -1,17 +1,24 @@
 import React from 'react'
-import { Text } from "@chakra-ui/core";
-import {MyAnchor} from 'components/navigation'
+import { Text, Link } from "@chakra-ui/core";
+
 
 export default({...rest})=>{
 
     return(
         <Text color="grey" align="center" {...rest}>
         {'A music playlist built with love using '}
-        <MyAnchor href="https://nextjs.org/" target='_blank'>
-          next.js
-        </MyAnchor> and <MyAnchor color='teal' href="https://www.prisma.io/" target='_blank'>
-          prisma
-        </MyAnchor>
+       
+        <Link href="https://nextjs.org/" target='_blank' color="teal.500">
+  next.js
+        </Link> 
+        , <Link  href="https://www.prisma.io/" target='_blank' color="orange.500">
+        prisma
+        </Link> and {" "}
+        <Link href="https://www.nexusjs.org/#/components/schema/plugins/prisma" target='_blank' color="pink.500">
+         
+          nexus
+         
+        </Link>
         {' team.'}
       </Text>
     )

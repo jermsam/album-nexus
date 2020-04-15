@@ -4,12 +4,11 @@ import MadeWithLove from 'components/MadeWithLove'
 import ProTip from 'components/ProTip';
 import { Box,Divider } from "@chakra-ui/core";
 import {SongForm, SongList} from 'components/songs'
-import { findSongs } from "pages/api";
+
 import { Container } from 'semantic-ui-react';
 
 
-
-export default({songs})=> {
+export default()=> {
   return (
     <Container text>
       <Divider/>
@@ -20,15 +19,10 @@ export default({songs})=> {
 
     </Box>
     <SongForm/>
-    <SongList {...{songs}}/>
+    <SongList/>
   </Container>
     
   );
 }
 
 
-export const getServerSideProps = async () => {
-
-  const songs = await findSongs();
-  return { props: { songs } };
-};

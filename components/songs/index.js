@@ -1,60 +1,111 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
 import {Button, Icon,
     List, ListItem,  Image, Flex, Text, Stack, Heading 
 } from "@chakra-ui/core";
 import debounce from 'lodash.debounce'
-import { Search,  } from 'semantic-ui-react'
+import {Search,  Container } from 'semantic-ui-react';
 import Link from 'next/link'
 import YoutubeSearch from 'youtube-api-search';
+import { useMutation,useQuery } from "@apollo/react-hooks";
+
+import {SongsQuery,CreateSongMutation} from 'pages/api/apollo'
 
 
 const key = 'AIzaSyCT5YNj0WpEUrt_4K8b3GZ6NoBZTOImXMA';
 
 
 
-export const Song = ({ name, artist, albumCoverUrl,...rest }) => (
+
+export const Song = ({ name, Artist, albumCoverUrl }) => {
+
+  React.useEffect(
+    ()=>{
+      console.log(Artist)
+    },[Artist]
+  )
+
+  return(
     
-        <Flex {...rest}>
-         <Image
-            size="100px"
-            borderTopLeftRadius={4}
-            borderBottomLeftRadius={4}
-            objectFit="cover"
-            src={albumCoverUrl||"imgs/imgpchd.png"}
-            alt={name}
-            mr={4}
-          />
-          <Stack mt={4}>
-            <Heading size="lg" fontWeight="500">
-              {name}
-            </Heading>
-            {artist&&<Text fontSize="lg" color="gray.700">{artist.name}</Text>}
-          </Stack>
-        </Flex>
-     
-  );
+    
+      <Flex>
+       <Image
+          size="100px"
+          borderTopLeftRadius={4}
+          borderBottomLeftRadius={4}
+          objectFit="cover"
+          src={albumCoverUrl||"imgs/imgpchd.png"}
+          alt={name}
+          mr={4}
+        />
+        <Stack mt={4}>
+          <Heading size="lg" fontWeight="500">
+            {name}
+          </Heading>
+          {Artist&&<Text fontSize="lg" color="gray.700">{Artist.name}</Text>}
+        </Stack>
+      </Flex>
+   
+)
+  
+}
   
   
 
-export const SongList= ({ songs }) => (
+export const SongList= () => {
+
+  const [songs,setSongs]=React.useState([])
+const { data,loading,error  } =useQuery(SongsQuery);
+
+React.useEffect(
+  ()=>{
+    if(data){
+      console.log(data)
+    setSongs(data.songs)
+    }
+  },[data]
+)
+
+
+  return(
+
     <List>
-      {songs.map((song) => (
-          <ListItem
-          key={song.id}
+      {loading&&<ListItem>
+
+
+... loading ...
+
+</ListItem>}
+      {songs.map(({ name, Artist, albumCoverUrl,id }) => (
+         
+         <ListItem
+         key={id}
           border="1px solid"
           borderColor="gray.200"
           borderRadius={4}
           my={2}
           bg="white"
         >
-          <Link href={`/songs/${song.id}`} as={`/songs/${song.id}`} passHref>
-        <Song as='a'  {...song} />
-        </Link>
+          <Link 
+         href={`/songs/${id}`} as={`/songs/${id}`}>
+           <a>
+           <Song   {...{ name,Artist, albumCoverUrl,id }} />
+           </a>
+         </Link>
+        
+       
     </ListItem>
+    
       ))}
+      {error&&<ListItem>
+
+... unkown Error! ...
+
+</ListItem>}
     </List>
   );
 
+}
   
   
   const resultRenderer = (song) => <Song {...song}/>
@@ -65,6 +116,7 @@ export const SongForm =()=>{
     const [value,setValue] = React.useState('')
     const [isSubmitting,setIsSubmitting] = React.useState(false)
     const [selected,setSelected] = React.useState(null)
+    const [createSong] = useMutation(CreateSongMutation);
 
     const handleSearchChange =(e, target) => {
 
@@ -86,7 +138,7 @@ export const SongForm =()=>{
                          ({id:{videoId},snippet:{title,thumbnails:{default:{url}},channelId,channelTitle}})=>({
                           id:videoId, 
                           name:title, 
-                          artist:{
+                          Artist:{
                               id:channelId,
                               name:channelTitle
                           }, 
@@ -114,37 +166,21 @@ export const SongForm =()=>{
         async ()=>{
            if(selected){
             setIsSubmitting(true)
-            const {artist,albumCoverUrl,id,name}=selected
-            const res= await fetch('http://localhost:3000/api/artists', {
-                method: 'POST',
-                body: JSON.stringify(
-                    {
-                        name:artist.name
-                    }
-                ),
-              });
-              console.log(res)
-
-            const song ={
-               artistId:res.id,
-                albumCoverUrl,
-                youtubeId:id,
-                name
+            const {Artist,albumCoverUrl,id,name}=selected
+            const variables= {
+              artist:Artist.name,
+              name,
+              albumCoverUrl,
+              youtubeId:id
             }
-            console.log(song)
-
-          await fetch('http://localhost:3000/api/songs', {
-                method: 'POST',
-                body: JSON.stringify(
-                   song
-                ),
-              });
+        
+            await createSong({ variables });
 
             setIsSubmitting(false)
               setValue('')
            }
             window.location.reload()
-        },[selected]
+        },[selected,createSong]
     )
 
     const onResultSelect = (e, { result }) => {
@@ -156,14 +192,15 @@ export const SongForm =()=>{
 
     return(
        
-           <Flex margin='1rem' >
+           <Flex flex marginTop='3rem' marginBottom='2rem' justify='center' >
 
-           <Flex marginTop='.4rem'>
-           <Search
+         <Container style={{minWidth:'360px'}}>
+         <Search
+         style={{ borderRadius: "0px !important"}}
            fluid
-            placeholder='search youtube'
+            placeholder='Search for a video from youtube'
             icon={<div/>}
-             
+            input={{ fluid: true }}
            size='huge'
                     loading={isLoading}
                   
@@ -174,19 +211,19 @@ export const SongForm =()=>{
                    
                    
                   />
-            </Flex>
-            <Flex  marginLeft='1rem' >
+         </Container>
+            <Flex flex flexDirection='row'  marginLeft='1rem'  align='center' >
             <Button
               mt={4}
               variantColor="teal" 
               variant="outline"
               isLoading={isSubmitting}
-              
+              marginTop='0'
               onClick={onSubmit}
               size="lg"
               type='submit'
             >
-             <Icon name='add' /> add to play list
+             <Icon name='add' /> 
             </Button>
             </Flex>
 
