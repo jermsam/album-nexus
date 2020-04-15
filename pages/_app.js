@@ -1,6 +1,6 @@
 import React from 'react';
 import App from 'next/app';
-import { Grommet} from 'grommet';
+import { ThemeProvider ,CSSReset} from "@chakra-ui/core";
 import { NextSeo } from 'next-seo';
 import SEO from 'next-seo.config';
 import theme from 'theme'
@@ -27,15 +27,16 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
 
     return (
-      <Grommet {...{theme}}>
+      <>
       {/* Wrap every thing in JSS and Theme providers */}
       
       <NextSeo {...SEO} />
-        
+      <ThemeProvider {...{theme}}>
+      <CSSReset />
           <Component {...pageProps} />
-       
+       </ThemeProvider>
       
-        </Grommet>
+        </>
     );
   }
 }

@@ -1,27 +1,34 @@
 import React from 'react';
-import {Container,Divider} from 'semantic-ui-react'
-import {Box,Heading }from 'grommet';
+
 import MadeWithLove from 'components/MadeWithLove'
 import ProTip from 'components/ProTip';
-import {MyLink }from 'components/navigation';
+import { Box,Divider } from "@chakra-ui/core";
+import {SongForm, SongList} from 'components/songs'
+import { findSongs } from "pages/api";
+import { Container } from 'semantic-ui-react';
 
 
 
-export default function Index() {
+export default({songs})=> {
   return (
     <Container text>
-      <Divider section hidden/>
+      <Divider/>
     <Box >
-      <Heading level="2">
-        Next.js v4-beta example
-      </Heading>
-      <MyLink color='brand' href='/about'>
-        Go to the About Us page
-        </MyLink>
-      <ProTip />
-      <MadeWithLove />
+  
+      <ProTip margin={{bottom:'none'}}/>
+      <MadeWithLove margin={{top:'none',bottom:"large"}}/>
+
     </Box>
+    <SongForm/>
+    <SongList {...{songs}}/>
   </Container>
     
   );
 }
+
+
+export const getServerSideProps = async () => {
+
+  const songs = await findSongs();
+  return { props: { songs } };
+};

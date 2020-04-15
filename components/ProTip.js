@@ -1,19 +1,16 @@
 import React from 'react';
-import {Text} from 'grommet'
-import {Info} from 'grommet-icons'
+import { Heading, Icon,
+} from "@chakra-ui/core";
 
 
 
 
-export default function ProTip() {
+export default function ProTip({...rest}) {
  
   return (
-    <Text  color="grey">
-      <Info color='accent-1'  size='medium'/>
-     Pro tip: Hi <Text color='teal'> {process.env.ME}</Text>{'. '} See more{' '}
-   
-      
-      on the Grommet v2 documentation.
-    </Text>
+    <Heading  color="grey" {...rest}>
+      <Icon name='info'/>
+     Pro Ziki
+    </Heading>
   );
 }

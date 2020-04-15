@@ -1,16 +1,16 @@
 import React from 'react'
-import {Text, }from 'grommet';
+import { Text } from "@chakra-ui/core";
 import {MyAnchor} from 'components/navigation'
 
-export default()=>{
+export default({...rest})=>{
 
     return(
-        <Text color="grey" align="center">
-        {'Built with love using '}
-        <MyAnchor href="https://v2.grommet.io/">
-          Grommet v2
-        </MyAnchor> and <MyAnchor color='teal' href="https://react.semantic-ui.com/usage">
-          Semantic ui react
+        <Text color="grey" align="center" {...rest}>
+        {'A music playlist built with love using '}
+        <MyAnchor href="https://nextjs.org/" target='_blank'>
+          next.js
+        </MyAnchor> and <MyAnchor color='teal' href="https://www.prisma.io/" target='_blank'>
+          prisma
         </MyAnchor>
         {' team.'}
       </Text>
