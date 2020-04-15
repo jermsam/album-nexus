@@ -59,7 +59,7 @@ And build your awesome App upon it
 
 ## The stack for the starter kit
 
-[Next.js](hhttps://nextjs.org/).
+[Next.js](https://nextjs.org/).
 [Prisma](https://www.prisma.io/).
 [Nexus](https://www.nexusjs.org/).
 [chakra-ui](https://chakra-ui.com/).
